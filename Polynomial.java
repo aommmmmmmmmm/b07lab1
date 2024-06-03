@@ -1,5 +1,8 @@
+import java.io.File;
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class Polynomial {
     double[] coefs;
@@ -87,11 +90,50 @@ public class Polynomial {
         return result == 0;
     }
 	
-	public Polynomial(File file) throws Exception{
+	public Polynomial(File file) throws IOException{
 		BufferedReader input = new BufferedReader(new FileReader(file));
 		String line = input.readLine();
 		input.close();
-		String[] s = line.split("");
-		
+		String[] str = line.split("[+-]");
+		double[] c = new double[str.length];
+		int[] e = new int[str.length];
+		int i = 0;
+		for (String st: str){
+			if(!st.contains("x")){
+				c[i] =  Double.parseDouble(st);
+				e[i] = 0;
+				i++;
+			}else{
+				String[] nums = st.split("x");
+				c[i] =  Double.parseDouble(nums[0]);
+				e[i] =  Integer.parseInt(nums[1]);
+				i++;
+				}
+			}
+		this.coefs = c;
+		this.expos = e;
+	}
+	
+    public String toString() {
+        StringBuilder str = new StringBuilder();
+        for (int i = 0; i < this.coefs.length; i++) {
+            if (coefs[i] > 0 && i != 0) str.append("+");
+            if (expos[i] == 0) {
+                str.append(coefs[i]);
+            } else {
+                str.append(coefs[i]).append("x");
+                if (expos[i] != 1) {
+                    str.append("^").append(expos[i]);
+                }
+            }
+        }
+        return str.toString();
+    }
+	
+	public void saveToFile(String file) throws IOException{
+		String str = this.toString();
+		FileWriter output = new FileWriter(file, false);
+		output.write(str);
+		output.close();
 	}
 }

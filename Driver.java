@@ -1,3 +1,6 @@
+import java.io.File;
+import java.io.*;
+
 public class Driver {
     public static void main(String [] args) {
         Polynomial p = new Polynomial();
@@ -16,6 +19,16 @@ public class Driver {
             System.out.println("1 is a root of s");
         else
             System.out.println("1 is not a root of s");
-		
+		try{
+			s.saveToFile("save_output.txt");
+		}catch (IOException e) {
+                System.out.println("An error occurred while saving the polynomial to file: " + e.getMessage());
+        }
+		try{
+			File file = new File("poly.txt");
+			Polynomial poly = new Polynomial(file);
+		}catch (IOException e) {
+                System.out.println("An error occurred while saving the polynomial to file: " + e.getMessage());
+        }
     }
 }
